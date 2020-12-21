@@ -1,0 +1,77 @@
+---
+title: "Week 1 - Peer Graded Assignment"
+author: "Me"
+date: "12/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#load libraries
+```{r}
+library(data.table)
+library(tidyverse)
+library(lubridate)
+```
+#plot1
+```{r}
+data = fread('household_power_consumption.txt', na.strings = '?')
+
+
+
+data = data %>%
+      mutate(Date = dmy(Date)) %>%
+      filter(Date <= '2007-02-02', Date>= '2007-02-01')
+
+with(data, hist(Global_active_power, main = 'Global Active Power', 
+                xlab = 'Global Active Power (kilowatts)', 
+                col = 'Red'))
+
+
+```
+#plot3
+```{r}
+data = data %>%
+      mutate(date_time = ymd_hms(paste0(Date, Time)))
+
+with(data, plot(date_time ,Global_active_power, type = 'l',
+                main = '', 
+                xlab = '', 
+                ylab  = 'Global Active Power (kilowats)'))
+```
+
+#plot3
+```{r}
+
+with(data, {
+      plot(date_time, Sub_metering_1, type = 'l', xlab = '', ylab= 'Energy sub metering')
+      lines(date_time, Sub_metering_2, col = 'red')
+      lines(date_time, Sub_metering_3, col = 'blue')
+      legend('topright',
+             legend = c('sub meter 1', 'sub meter 2','sub meter 3'),
+             col = c('black','red','blue'),
+             lty = c(1,1,1))
+})
+```
+
+#plot 4
+```{r}
+par(mfrow = c(2,2))
+with(data, {
+   plot(date_time, Global_active_power, type = 'l', xlab = '', ylab=  'Global Active Power')
+   plot(date_time, Voltage, type = 'l', xlab= 'datetime', ylab = 'Voltage')
+   plot(date_time, Sub_metering_1, type = 'l', xlab = '', ylab= 'Energy sub metering')
+      lines(date_time, Sub_metering_2, col = 'red')
+      lines(date_time, Sub_metering_3, col = 'blue')
+      legend('topright',
+             legend = c('sub meter 1', 'sub meter 2','sub meter 3'),
+             col = c('black','red','blue'),
+             lty = c(1,1,1),
+             cex = .5)
+   plot(date_time, Global_reactive_power, type = 'l', xlab = 'datetime')
+})
+```
+
+
